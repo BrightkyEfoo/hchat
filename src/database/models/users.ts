@@ -1,40 +1,38 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
-import { sequelize } from '../dbInit';
+// src/models/user.ts
 
-function genModel (sequelize: Sequelize) {
-  class User extends Model {
-    declare name: string;
-    declare email: string;
-    declare phone: string;
-    declare socketId: string;
+import prisma from '../prisma'
+
+export class User {
+  async findAll() {
+    return await prisma.user.findMany()
   }
 
-  User.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      name: {
-        type: DataTypes.STRING,
-      },
-      email: {
-        type: DataTypes.STRING,
-      },
-      phone: {
-        type: DataTypes.STRING,
-      },
+  async findById(id: number) {
+    return await prisma.user.findUnique({ where: { id } })
+  }
 
-      // socket id doit etre enregistre separement dans redis, car plus de rapidite
-      socketId: {
-        type: DataTypes.STRING,
-      },
-    },
-    { sequelize }
-  );
+  async createUser(data: any) {
+    return await prisma.user.create({ data })
+  }
 
-  return User;
-};
+  async updateUser(id: number, data: any) {
+    return await prisma.user.update({
+      where: { id },
+      data,
+    })
+  }
 
-export const User = genModel(sequelize);
+  async deleteUser(id: number) {
+    return await prisma.user.delete({ where: { id } })
+  }
+}
+
+export const user = new User()
+
+
+
+
+
+
+
+

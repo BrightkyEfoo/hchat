@@ -1,59 +1,29 @@
-import { DataTypes, Model, Sequelize } from 'sequelize';
-import { sequelize } from '../dbInit';
-import { User } from './users';
 
-// message one on one
-export function genModel (sequelize: Sequelize) {
-  class Message extends Model {
-    declare senderId: number;
-    declare recieverId: number;
-    declare channelId: number;
-    declare text: number;
-    declare seenAt: Date;
-    declare sentAt: Date;
-    declare recievedAt: Date;
-    declare status: number;
+import prisma from '../prisma'
+
+export class Message {
+  async findAll() {
+    return await prisma.message.findMany()
   }
 
-  Message.init(
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        autoIncrement: true,
-        primaryKey: true,
-      },
-      senderId: {
-        type: DataTypes.INTEGER,
-        references: typeof User,
-      },
-      recieverId: {
-        type: DataTypes.INTEGER,
-        references: typeof User,
-      },
-      channelId: {
-        type: DataTypes.INTEGER,
-      },
-      text: {
-        type: DataTypes.STRING,
-      },
-      seenAt: {
-        type: DataTypes.DATE,
-      },
-      sentAt: {
-        type: DataTypes.DATE,
-      },
-      recievedAt: {
-        type: DataTypes.DATE,
-      },
-      status: {
-        type: DataTypes.STRING,
-      },
-    },
-    { sequelize }
-  );
+  async findById(id: number) {
+    return await prisma.message.findUnique({ where: { id } })
+  }
 
-  return Message;
-};
+  async createMessage(data: any) {
+    return await prisma.message.create({ data })
+  }
 
+  async updateMessage(id: number, data: any) {
+    return await prisma.message.update({
+      where: { id },
+      data,
+    })
+  }
 
-export const Messages = genModel(sequelize)
+  async deleteMessage(id: number) {
+    return await prisma.user.delete({ where: { id } })
+  }
+}
+
+export const message = new Message()
