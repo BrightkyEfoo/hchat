@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
@@ -8,28 +9,28 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @autoincrement
-  name      String
-  email     String   @unique
-  phone     String
-  socketId  String?
+  id               Int       @id @default(autoincrement())
+  name             String
+  email            String    @unique
+  phone            String
+  socketId         String?
+  SentMessages     Message[] @relation(name: "sender")
+  RecievedMessages Message[] @relation(name: "reciever")
 
   @@unique([socketId])
 }
 
-
 model Message {
-  id              Int                @id @default(autoincrement())
-  text            String
-  status          String?  
-  seenAt          DateTime?           
-  sentAt          DateTime            @default(now())
-  recievedAt      DateTime?
-  senderId        Int?
-  sender          User?              @relation(fields: [senderId], references: [id])
-  recieverId      Int?
-  reciever        User?              @relation(fields: [recieverId], references: [id])
-  
+  id         Int       @id @default(autoincrement())
+  text       String
+  status     String?
+  seenAt     DateTime?
+  sentAt     DateTime  @default(now())
+  recievedAt DateTime?
+  senderId   Int?
+  sender     User?     @relation(fields: [senderId], references: [id], name: "sender")
+  recieverId Int?
+  reciever   User?     @relation(fields: [recieverId], references: [id], name: "reciever")
 
   @@map("Posts")
 }

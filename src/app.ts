@@ -36,7 +36,5 @@ app.get('/', (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
-  await dbInit()
-  console.log("db connected");
   
 });
