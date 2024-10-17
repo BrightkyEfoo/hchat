@@ -14,9 +14,9 @@ model User {
   email            String    @unique
   phone            String
   socketId         String?
-  SentMessages     Message[] @relation(name: "sender")
-  RecievedMessages Message[] @relation(name: "reciever")
-
+  sentMessages     Message[] @relation(name: "sender")
+  recievedMessages Message[] @relation(name: "reciever")
+  groups           UsersGroups[]
   @@unique([socketId])
 }
 
@@ -31,6 +31,24 @@ model Message {
   sender     User?     @relation(fields: [senderId], references: [id], name: "sender")
   recieverId Int?
   reciever   User?     @relation(fields: [recieverId], references: [id], name: "reciever")
+  groupId    Int?
+  group      Group?     @relation(fields: [groupId], references: [id], name: "group")
 
-  @@map("Posts")
+}
+
+
+model Group {
+  id               Int       @id @default(autoincrement())
+  name             String
+  users           UsersGroups[]
+}
+
+model UsersGroups {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  group      Group     @relation(fields: [groupId], references: [id])
+  groupId    Int
+  assignedAt DateTime @default(now())
+  
+  @@id([userId, groupId])
 }
