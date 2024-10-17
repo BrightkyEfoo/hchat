@@ -13,6 +13,7 @@ model User {
   name             String
   email            String    @unique
   phone            String
+  password         String
   socketId         String?
   sentMessages     Message[] @relation(name: "sender")
   recievedMessages Message[] @relation(name: "reciever")
@@ -40,7 +41,8 @@ model Message {
 model Group {
   id               Int       @id @default(autoincrement())
   name             String
-  users           UsersGroups[]
+  users            UsersGroups[]
+  messages         Message[] @relation(name: "group")
 }
 
 model UsersGroups {
@@ -49,6 +51,6 @@ model UsersGroups {
   group      Group     @relation(fields: [groupId], references: [id])
   groupId    Int
   assignedAt DateTime @default(now())
-  
+
   @@id([userId, groupId])
 }
