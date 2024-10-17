@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               Int       @id @default(autoincrement())
+  name             String
+  email            String    @unique
+  phone            String
+  password         String
+  socketId         String?
+  sentMessages     Message[] @relation(name: "sender")
+  recievedMessages Message[] @relation(name: "reciever")
+  groups           UsersGroups[]
+  @@unique([socketId])
+}
+
+model Message {
+  id         Int       @id @default(autoincrement())
+  text       String
+  status     String?
+  seenAt     DateTime?
+  sentAt     DateTime  @default(now())
+  recievedAt DateTime?
+  senderId   Int?
+  sender     User?     @relation(fields: [senderId], references: [id], name: "sender")
+  recieverId Int?
+  reciever   User?     @relation(fields: [recieverId], references: [id], name: "reciever")
+  groupId    Int?
+  group      Group?     @relation(fields: [groupId], references: [id], name: "group")
+
+}
+
+
+model Group {
+  id               Int       @id @default(autoincrement())
+  name             String
+  users            UsersGroups[]
+  messages         Message[] @relation(name: "group")
+}
+
+model UsersGroups {
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  group      Group     @relation(fields: [groupId], references: [id])
+  groupId    Int
+  assignedAt DateTime @default(now())
+
+  @@id([userId, groupId])
+}
