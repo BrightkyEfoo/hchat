@@ -1,13 +1,11 @@
-import config from 'config';
 import cors from 'cors';
-import express from 'express';
-import morgan from 'morgan';
-import path from 'path';
-import favicon from 'serve-favicon';
 import dotenv from 'dotenv';
-import dbInit from './database/dbInit';
+import express from 'express';
 import { createServer } from 'http';
+import morgan from 'morgan';
+import favicon from 'serve-favicon';
 import { Server } from 'socket.io';
+import prisma from './database/prisma';
 
 dotenv.config();
 
@@ -36,5 +34,8 @@ app.get('/', (req, res) => {
 
 app.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
-  
+
+  const user = await prisma.user.create({data : {email : 'bright', name : 'hello', phone : 'sks,x'}})
+
+  console.log('user', user)
 });
