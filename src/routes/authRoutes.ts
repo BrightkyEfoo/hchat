@@ -1,15 +1,12 @@
 import { Router } from 'express';
+import { usersController } from '../controllers/userController';
+import { hydradeBody } from '../middlewares/fileStore';
 import { validate } from '../middlewares/validate';
 import { userZodSchemas } from '../schemas/user';
-import { usersController } from '../controllers/userController';
-// import { hydradeBody, uploadSingle } from '../../middlewares/fileStore';
-import { authToken } from '../middlewares/jwt';
-import { hydradeBody, uploadSingle } from '../middlewares/fileStore';
 
 const router = Router();
 
 router.post(['/auth/register', '/auth/signup', '/auth/sign-up'], [
-        // uploadSingle('profilePicture'),
         hydradeBody,
         validate(userZodSchemas.register),
     ],
