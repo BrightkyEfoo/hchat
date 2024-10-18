@@ -38,7 +38,25 @@ class RedisService {
     }
   }
 
-//   LPush
-//   LTrim
+  public static async lPush(key: string, value: any): Promise<void> {
+    const client = await this.getInstance();
+    try {
+      await client.lPush(key, JSON.stringify(value));
+    } catch (error: any) {
+      console.log(`Error occurred while pushing value for key: ${key}`);
+      throw error;
+    }
+  }
+
+  public static async lTrim(key: string, min: number, max:number): Promise<void> {
+    const client = await this.getInstance();
+    try {
+      await client.lTrim(key, min, max);
+    } catch (error: any) {
+      console.log(`Error occurred while trimming value for key: ${key}`);
+      throw error;
+    }
+  }
+
 
 }
