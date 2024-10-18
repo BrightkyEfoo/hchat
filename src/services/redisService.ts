@@ -37,14 +37,8 @@ class RedisService {
       throw error;
     }
   }
-}
 
-// Usage example
-async function main() {
-  // Set a value
-  await RedisService.setValue('myKey', { name: 'John Doe' });
+//   LPush
+//   LTrim
 
-  // Get a value
-  const value = await RedisService.getValue('myKey');
-  console.log(value);
 }
