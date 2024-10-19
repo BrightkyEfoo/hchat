@@ -18,7 +18,7 @@ export class RedisService {
   }
 
   public static async getValue(key: string): Promise<any> {
-    const client = this.getInstance();
+    const client = await this.getInstance();
     try {
       const value = await client.get(key); // Change to get for standard key-value pairs
       return JSON.parse(value || 'null'); // Assuming stored values are JSON strings
