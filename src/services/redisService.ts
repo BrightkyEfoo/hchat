@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-class RedisService {
+export class RedisService {
   private static instance: ReturnType<typeof createClient>;
 
   private constructor() {}
