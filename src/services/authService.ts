@@ -9,9 +9,7 @@ const register = async (user: IUser) => {
     try {
         const hashedPwd = await bcrypt.hash(user.password, 10);
         user.password = hashedPwd;
-        const newUser = await prisma.user.create({data: user});        
-        const newUserCopy = newUser.toJSON();
-        delete newUserCopy.password;
+        const { password: _, ...newUserCopy } = await prisma.user.create({data: user});        
         return newUserCopy;
     } catch (e: any) {
         console.error(`Error when trying to save user to db \nReason:${e}`);
@@ -41,8 +39,7 @@ const login = async (credentials: { email: string; password: string }) => {
             return 'INVALID_PASSWORD';
         }
 
-        const userCopy = user.toJSON();
-        delete userCopy.password;
+        const {password: _, ...userCopy} = user
         return userCopy;
     } catch (e: any) {
         throw new AppError('ERROR', e.message, false);

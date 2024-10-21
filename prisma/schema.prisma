@@ -14,11 +14,9 @@ model User {
   email            String    @unique
   phone            String
   password         String
-  socketId         String?
   sentMessages     Message[] @relation(name: "sender")
   recievedMessages Message[] @relation(name: "reciever")
   groups           UsersGroups[]
-  @@unique([socketId])
 }
 
 model Message {

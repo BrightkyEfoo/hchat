@@ -1,7 +1,6 @@
-import { Prisma } from "@prisma/client";
 import prisma from "../../database/prisma";
-import { TIoType } from "../../types/io";
 import { SocketCacheService } from "../../services/socketCacheService";
+import { TIoType } from "../../types/io";
 
 export default function(io:TIoType) {
     const socketCacheService = new SocketCacheService;

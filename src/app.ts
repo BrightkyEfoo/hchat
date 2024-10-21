@@ -1,20 +1,21 @@
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
-import { createServer } from 'http';
+import http from 'http';
 import morgan from 'morgan';
 import favicon from 'serve-favicon';
 import { Server } from 'socket.io';
-import prisma from './database/prisma';
 import { authRouter } from './routes/authRoutes';
+import SocketService from './services/socketService';
 
 
 dotenv.config();
 
 const port = process.env.PORT || 9000;
 const app = express();
-const server = createServer(app);
+const server = http.createServer(app);
 export const io = new Server(server);
+export const socketService = new SocketService(io)
 
 app
 .use(
@@ -30,7 +31,7 @@ app.use('/public', express.static('assets')).use(favicon('./assets/images/favico
 const version = 'v1';
 const appName = 'api';
 const context = `/${appName}/${version}`;
-app.use([`${context}/users`, `${context}/user`], authRouter);
+app.use(`${context}/auth`, authRouter);
 
 
 app.get('/', (req, res) => {
@@ -38,10 +39,8 @@ app.get('/', (req, res) => {
 });
 // Do your logic here
 
-app.listen(port, async () => {
+
+server.listen(port, async () => {
   console.log(`Server listening on port ${port}`);
 
-  // const user = await prisma.user.create({data : {email : 'bright', name : 'hello', phone : 'sks,x', password:'pass@123'}})
-
-  // console.log('user', user)
 });

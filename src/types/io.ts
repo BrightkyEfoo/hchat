@@ -1,3 +1,3 @@
-import { DefaultEventsMap, Server } from "socket.io";
+import { DefaultEventsMap, Server, Socket } from "socket.io";
 
-export type TIoType = Server<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>
+export type TIoType = Socket<DefaultEventsMap, DefaultEventsMap, DefaultEventsMap, any>

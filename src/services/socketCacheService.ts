@@ -2,7 +2,7 @@ import { TAckStatusTypes } from "../types/ackTypes";
 import { RedisService } from "./redisService";
 
 export class SocketCacheService {
-    public async setUserSocket(userId:number, socketId:any) {
+    public async setUserSocket(userId:number, socketId:string | null) {
         await RedisService.setValue(`user:${userId}:socket-id`, socketId);
     }
 

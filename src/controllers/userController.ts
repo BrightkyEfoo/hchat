@@ -6,6 +6,7 @@ import { authService } from '../services/authService';
 
 const register = async (req: Request, res: Response, next: NextFunction) => {
     try {
+        console.log('req.body', req.body)
         const userRes = await authService.register(req.body);
         if (userRes === 1) {
             throw new AppError('ERROR', `Something went wrong on db when creating user`, true);
@@ -24,8 +25,7 @@ const register = async (req: Request, res: Response, next: NextFunction) => {
 
 const login = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const { email, password } = req.body;
-        const credentials = { email, password };
+        const credentials =  req.body;
         const loginResponse = await authService.login(credentials);
         if (loginResponse === 1 || loginResponse === 2) {
             throw new AppError(
@@ -45,7 +45,7 @@ const login = async (req: Request, res: Response, next: NextFunction) => {
         }
         const token = jwt.sign(
             {
-                userId: loginResponse._id,
+                userId: loginResponse.id,
                 random: randomUUID(),
                 appName: 'ecommerce',
                 roles: loginResponse.roles,
